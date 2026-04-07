@@ -21,7 +21,7 @@ class TestTransferFunds:
         create_user_response = requests.post(
             url='http://localhost:4111/api/admin/create',
             json={
-                'username': 'Max43',
+                'username': 'Max44',
                 'password': 'Pas!sw0rd',
                 'role': 'ROLE_USER'
             },
@@ -36,7 +36,7 @@ class TestTransferFunds:
         login_user_response = requests.post(
             url='http://localhost:4111/api/auth/token/login',
             json={
-                'username': 'Max43',
+                'username': 'Max44',
                 'password': 'Pas!sw0rd'
             },
             headers={
