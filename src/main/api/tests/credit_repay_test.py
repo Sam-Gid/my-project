@@ -1,5 +1,4 @@
 import requests
-
 from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.create_user_response import CreateUserResponse
@@ -15,7 +14,7 @@ class TestCreditRepay:
     def test_credit_repay(self):
         login_user_request = LoginUserRequest(username='admin', password='123456')
 
-        login_admin_response = requests.post(
+        response = requests.post(
             url='http://localhost:4111/api/auth/token/login',
             json=login_user_request.model_dump(),
             headers={
@@ -24,10 +23,15 @@ class TestCreditRepay:
             }
         )
 
-        assert login_admin_response.status_code == 200
-        token = login_admin_response.json().get('token')
+        login_user_response = LoginUserResponse(**response.json())
 
-        create_user_request = CreateUserRequest(username='Max317', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
+        assert response.status_code == 200
+        assert login_user_response.user.username == 'admin'
+        assert login_user_response.user.role == 'ROLE_ADMIN'
+
+        token = response.json().get('token')
+
+        create_user_request = CreateUserRequest(username='Sam001', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
 
         response = requests.post(
             url='http://localhost:4111/api/admin/create',
@@ -44,7 +48,7 @@ class TestCreditRepay:
         assert create_user_request.username == create_user_response.username
         assert create_user_request.role == create_user_response.role
 
-        login_user_request = LoginUserRequest(username='Max317', password='Pas!sw0rd')
+        login_user_request = LoginUserRequest(username='Sam001', password='Pas!sw0rd')
 
         response = requests.post(
             url='http://localhost:4111/api/auth/token/login',
@@ -118,7 +122,7 @@ class TestCreditRepay:
     def test_credit_repay_with_invalid_amount(self):
         login_user_request = LoginUserRequest(username='admin', password='123456')
 
-        login_admin_response = requests.post(
+        response = requests.post(
             url='http://localhost:4111/api/auth/token/login',
             json=login_user_request.model_dump(),
             headers={
@@ -127,10 +131,15 @@ class TestCreditRepay:
             }
         )
 
-        assert login_admin_response.status_code == 200
-        token = login_admin_response.json().get('token')
+        login_user_response = LoginUserResponse(**response.json())
 
-        create_user_request = CreateUserRequest(username='Max318', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
+        assert response.status_code == 200
+        assert login_user_response.user.username == 'admin'
+        assert login_user_response.user.role == 'ROLE_ADMIN'
+
+        token = response.json().get('token')
+
+        create_user_request = CreateUserRequest(username='Sam002', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
 
         response = requests.post(
             url='http://localhost:4111/api/admin/create',
@@ -147,7 +156,7 @@ class TestCreditRepay:
         assert create_user_request.username == create_user_response.username
         assert create_user_request.role == create_user_response.role
 
-        login_user_request = LoginUserRequest(username='Max318', password='Pas!sw0rd')
+        login_user_request = LoginUserRequest(username='Sam002', password='Pas!sw0rd')
 
         response = requests.post(
             url='http://localhost:4111/api/auth/token/login',
@@ -202,10 +211,8 @@ class TestCreditRepay:
 
         boundary_values = [4999, 5001]
 
-        # Проверяем, что сумма пополнения, не равная сумме кредита, отклоняется
-
+        # Проверяем, что суммы пополнений, которые не равны сумме кредита, отклоняются.
         for i in range(2):
-
             credit_repay_request = CreditRepayRequest(creditId=credit_id, accountId=account_id, amount=boundary_values[i])
 
             credit_repay_response = requests.post(
@@ -228,7 +235,7 @@ class TestCreditRepay:
     def test_repay_closed_credit(self):
         login_user_request = LoginUserRequest(username='admin', password='123456')
 
-        login_admin_response = requests.post(
+        response = requests.post(
             url='http://localhost:4111/api/auth/token/login',
             json=login_user_request.model_dump(),
             headers={
@@ -237,10 +244,15 @@ class TestCreditRepay:
             }
         )
 
-        assert login_admin_response.status_code == 200
-        token = login_admin_response.json().get('token')
+        login_user_response = LoginUserResponse(**response.json())
 
-        create_user_request = CreateUserRequest(username='Max319', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
+        assert response.status_code == 200
+        assert login_user_response.user.username == 'admin'
+        assert login_user_response.user.role == 'ROLE_ADMIN'
+
+        token = response.json().get('token')
+
+        create_user_request = CreateUserRequest(username='Sam003', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
 
         response = requests.post(
             url='http://localhost:4111/api/admin/create',
@@ -257,7 +269,7 @@ class TestCreditRepay:
         assert create_user_request.username == create_user_response.username
         assert create_user_request.role == create_user_response.role
 
-        login_user_request = LoginUserRequest(username='Max319', password='Pas!sw0rd')
+        login_user_request = LoginUserRequest(username='Sam003', password='Pas!sw0rd')
 
         response = requests.post(
             url='http://localhost:4111/api/auth/token/login',

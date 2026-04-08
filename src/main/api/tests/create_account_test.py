@@ -29,7 +29,7 @@ class TestCreateAccount:
 
         token = response.json().get('token')
 
-        create_user_request = CreateUserRequest(username='Max500', password='Pas!sw0rd', role='ROLE_USER')
+        create_user_request = CreateUserRequest(username='Sam012', password='Pas!sw0rd', role='ROLE_USER')
 
         response = requests.post(
             url='http://localhost:4111/api/admin/create',
@@ -46,7 +46,7 @@ class TestCreateAccount:
         assert create_user_request.username == create_user_response.username
         assert create_user_request.role == create_user_response.role
 
-        login_user_request = LoginUserRequest(username='Max500', password='Pas!sw0rd')
+        login_user_request = LoginUserRequest(username='Sam012', password='Pas!sw0rd')
 
         response = requests.post(
             url='http://localhost:4111/api/auth/token/login',
