@@ -1,0 +1,21 @@
+from http import HTTPStatus
+import requests
+from requests import Response
+from src.main.api.models.account_deposit_request import DepositAccountRequest
+from src.main.api.models.account_deposit_response import AccountDepositResponse
+from src.main.api.requests.requester import Requester
+
+
+class AccountDepositRequester(Requester):
+    def post(self, account_deposit_request: DepositAccountRequest) -> AccountDepositResponse | Response:
+        url = f'{self.base_url}/account/deposit'
+        response = requests.post(
+            url=url,
+            json=account_deposit_request.model_dump(),
+            headers=self.headers,
+        )
+        self.response_spec(response)
+
+        if response.status_code == HTTPStatus.OK:
+            return AccountDepositResponse(**response.json())
+        return response

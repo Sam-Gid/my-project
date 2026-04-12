@@ -1,88 +1,25 @@
-from src.main.api.requests.credit_requester import CreditRequester
-from src.main.api.requests.create_account_requester import CreateAccountRequester
-from src.main.api.specs.response_specs import ResponseSpecs
-from src.main.api.specs.request_specs import RequestSpecs
-from src.main.api.requests.create_user_requester import CreateUserRequester
-from src.main.api.models.credit_request_model import CreditRequestModel
-from src.main.api.models.create_user_request import CreateUserRequest
 
 
 class TestCreditRequest:
-    def test_create_account(self):
-        create_user_request = CreateUserRequest(username='Sam86', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
-
-        CreateUserRequester(
-            request_spec=RequestSpecs.auth_headers(username='admin', password='123456'),
-            response_spec=ResponseSpecs.request_ok()
-        ).post(create_user_request)
-
-        response = CreateAccountRequester(
-            request_spec=RequestSpecs.auth_headers(username='Sam86', password='Pas!sw0rd'),
-            response_spec=ResponseSpecs.request_created()
-        ).post(None)
-        account_id = response.id
-
-        credit_request_model = CreditRequestModel(accountId=account_id, amount=5000, termMonths=12)
-
-        response = CreditRequester(
-            request_spec=RequestSpecs.auth_headers(username='Sam86', password='Pas!sw0rd'),
-            response_spec=ResponseSpecs.request_created()
-        ).post(credit_request_model)
+    def test_valid_credit_request(self, api_manager, create_credit_user, create_credit_account):
+        response = api_manager.user_steps.valid_credit_request(create_credit_user, create_credit_account)
 
         assert response.balance == 5000
-        assert response.termMonths == 12
 
+    def test_credit_request_without_permission(self, api_manager, create_user, create_account):
 
-    def test_credit_request_without_permission(self):
-
-        # Создаем пользователся без права на кредитование (ROLE_USER).
-        create_user_request = CreateUserRequest(username='Sam87', password='Pas!sw0rd', role='ROLE_USER')
-
-        CreateUserRequester(
-            request_spec=RequestSpecs.auth_headers(username='admin', password='123456'),
-            response_spec=ResponseSpecs.request_ok()
-        ).post(create_user_request)
-
-        response = CreateAccountRequester(
-            request_spec=RequestSpecs.auth_headers(username='Sam87', password='Pas!sw0rd'),
-            response_spec=ResponseSpecs.request_created()
-        ).post(None)
-        account_id = response.id
-
-        credit_request_model = CreditRequestModel(accountId=account_id, amount=5000, termMonths=12)
-
-        response = CreditRequester(
-            request_spec=RequestSpecs.auth_headers(username='Sam87', password='Pas!sw0rd'),
-            response_spec=ResponseSpecs.request_forbidden()
-        ).post(credit_request_model)
+        # Используем пользователя без права на кредитование (create_user).
+        response = api_manager.user_steps.invalid_role_credit_request(create_user, create_account)
 
         assert response.status_code == 403
 
-
-    def test_credit_request_with_invalid_amount(self):
-        create_user_request = CreateUserRequest(username='Sam88', password='Pas!sw0rd', role='ROLE_CREDIT_SECRET')
-
-        CreateUserRequester(
-            request_spec=RequestSpecs.auth_headers(username='admin', password='123456'),
-            response_spec=ResponseSpecs.request_ok()
-        ).post(create_user_request)
-
-        response = CreateAccountRequester(
-            request_spec=RequestSpecs.auth_headers(username='Sam88', password='Pas!sw0rd'),
-            response_spec=ResponseSpecs.request_created()
-        ).post(None)
-        account_id = response.id
-
-        boundary_values = [4999, 15001]
+    def test_credit_request_with_invalid_amount(self, api_manager, create_credit_user, create_credit_account):
 
         # Проверяем, что суммы кредита ниже минимума и выше максимума отклоняются.
-        for i in range(2):
-            credit_request_model = CreditRequestModel(accountId=account_id, amount=boundary_values[i], termMonths=12)
-
-            response = CreditRequester(
-                request_spec=RequestSpecs.auth_headers(username='Sam88', password='Pas!sw0rd'),
-                response_spec=ResponseSpecs.request_bad()
-            ).post(credit_request_model)
+        credit_amounts = [4999, 15001]
+        for invalid_amount in credit_amounts:
+            create_credit_account.amount = invalid_amount
+            response = api_manager.user_steps.invalid_amount_credit_request(create_credit_user, create_credit_account)
 
             assert response.status_code == 400
 

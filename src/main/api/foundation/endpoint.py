@@ -1,6 +1,15 @@
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, Type
+from src.main.api.models.transfer_funds_request import TransferFundsRequest
+from src.main.api.models.transfer_funds_response import TransferFundsResponse
+from src.main.api.models.credit_repay_request import CreditRepayRequest
+from src.main.api.models.credit_repay_response import CreditRepayResponse
+from src.main.api.models.credit_request_model import CreditRequestModel
+from src.main.api.models.credit_request_response import CreditRequestResponse
+from src.main.api.models.account_deposit_response import AccountDepositResponse
+from src.main.api.models.account_deposit_request import AccountDepositRequest
+from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.base_model import BaseModel
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.create_user_response import CreateUserResponse
@@ -33,3 +42,35 @@ class Endpoint(Enum):
         url='/auth/token/login',
         response_model=LoginUserResponse
     )
+
+    CREATE_ACCOUNT = EndpointConfiguration(
+        request_model=None,
+        url='/account/create',
+        response_model=CreateAccountResponse
+    )
+
+    ACCOUNT_DEPOSIT = EndpointConfiguration(
+        request_model=AccountDepositRequest,
+        url='/account/deposit',
+        response_model=AccountDepositResponse
+    )
+
+    TRANSFER_FUNDS = EndpointConfiguration(
+        request_model=TransferFundsRequest,
+        url='/account/transfer',
+        response_model=TransferFundsResponse
+    )
+
+    CREDIT_REQUEST = EndpointConfiguration(
+        request_model=CreditRequestModel,
+        url='/credit/request',
+        response_model=CreditRequestResponse
+    )
+
+
+    CREDIT_REPAY = EndpointConfiguration(
+        request_model=CreditRepayRequest,
+        url='/credit/repay',
+        response_model=CreditRepayResponse
+    )
+
