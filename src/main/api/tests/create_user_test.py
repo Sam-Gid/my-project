@@ -32,9 +32,8 @@ class TestCreateUser:
     )
     def test_create_user_invalid(self, username, password, api_manager):
         create_user_request = CreateUserRequest(username=username, password=password, role='ROLE_USER')
-
-        api_manager.admin_steps.create_invalid_user(create_user_request)
-
+        response = api_manager.admin_steps.create_invalid_user(create_user_request)
+        assert response.status_code == 400
 
 
 
