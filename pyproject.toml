@@ -10,4 +10,5 @@ dependencies = [
     "selenium>=4.35.0",
     "rstr>=3.2.2",
     "allure-python-commons>=2.15.3",
+    "sqlalchemy>=2.0.49",
 ]
