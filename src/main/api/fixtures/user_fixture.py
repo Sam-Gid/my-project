@@ -52,14 +52,14 @@ def funded_account(api_manager, create_user_request, create_transfer_accounts):
     # Пополняем баланс аккаунта №1.
     account_id = create_transfer_accounts[0]
     account_deposit_request = AccountDepositRequest(accountId=account_id, amount=1500)
-    api_manager.user_steps.account_deposit_request(create_user_request, account_deposit_request)
-    return account_id
+    fund_account_request = api_manager.user_steps.account_deposit_request(create_user_request, account_deposit_request)
+    return fund_account_request
 
 
 @pytest.fixture
 def transfer_funds_request(api_manager, funded_account, create_transfer_accounts):
     transfer_funds_request = TransferFundsRequest(
-        fromAccountId=funded_account,
+        fromAccountId=funded_account.id,
         toAccountId=create_transfer_accounts[1],
         amount=500
     )
