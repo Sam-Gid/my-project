@@ -12,11 +12,11 @@ class TestCreateUser:
         create_user_request = RandomModelGenerator.generate(CreateUserRequest)
         response = api_manager.admin_steps.create_user(create_user_request)
 
-        assert create_user_request.username == response.username, ...
-        assert create_user_request.role == response.role, ...
+        assert create_user_request.username == response.username, 'Ошибка: Имя пользователя не соответствует запросу'
+        assert create_user_request.role == response.role, 'Ошибка: Роль пользователя не соответствует запросу'
 
         user_from_db = User.get_user_by_username(db_session, create_user_request.username)
-        assert user_from_db.username == create_user_request.username, 'Созданного пользователя нет в БД'
+        assert user_from_db.username == create_user_request.username, 'Ошибка: Имя пользователя не найдено в БД'
 
 
     @pytest.mark.parametrize(
@@ -39,10 +39,4 @@ class TestCreateUser:
         assert response.status_code == 400
 
         user_from_db = User.get_user_by_username(db_session, create_user_request.username)
-        assert user_from_db is None, 'Пользователь создан, ошибка'
-
-
-
-
-
-
+        assert user_from_db is None, 'Ошибка: Пользователь обнаружен в БД'

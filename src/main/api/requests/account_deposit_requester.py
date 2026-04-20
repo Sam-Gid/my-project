@@ -1,13 +1,13 @@
 from http import HTTPStatus
 import requests
 from requests import Response
-from src.main.api.models.account_deposit_request import DepositAccountRequest
+from src.main.api.models.account_deposit_request import AccountDepositRequest
 from src.main.api.models.account_deposit_response import AccountDepositResponse
 from src.main.api.requests.requester import Requester
 
 
 class AccountDepositRequester(Requester):
-    def post(self, account_deposit_request: DepositAccountRequest) -> AccountDepositResponse | Response:
+    def post(self, account_deposit_request: AccountDepositRequest) -> AccountDepositResponse | Response:
         url = f'{self.base_url}/account/deposit'
         response = requests.post(
             url=url,

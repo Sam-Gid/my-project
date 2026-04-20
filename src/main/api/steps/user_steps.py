@@ -1,3 +1,4 @@
+from src.main.api.models.base_model import BaseModel
 from src.main.api.models.transfer_funds_request import TransferFundsRequest
 from src.main.api.models.credit_repay_request import CreditRepayRequest
 from src.main.api.foundation.requesters.crud_requester import CrudRequester
@@ -122,5 +123,3 @@ class UserSteps(BaseSteps):
             ResponseSpecs.request_unprocessable()
         ).post(credit_repay_request)
         return response
-
-

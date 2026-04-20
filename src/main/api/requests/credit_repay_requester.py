@@ -1,5 +1,4 @@
 from http import HTTPStatus
-
 import requests
 from requests import Response
 from src.main.api.models.credit_repay_request import CreditRepayRequest

@@ -1,7 +1,5 @@
 from http import HTTPStatus
-
 import requests
-
 from src.main.api.models.transfer_funds_request import TransferFundsRequest
 from src.main.api.models.transfer_funds_response import TransferFundsResponse
 from requests import Response

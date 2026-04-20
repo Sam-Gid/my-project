@@ -1,17 +1,17 @@
 import logging
-from typing import List, Any
+from typing import Any, Generator
 import pytest
 from src.main.api.classes.api_manager import ApiManager
 from src.main.api.models.create_user_response import CreateUserResponse
 
 
 @pytest.fixture
-def created_obj():
-    objects: List[Any] = []
+def created_obj() -> Generator[list[Any], Any, None]:
+    objects: list[Any] = []
     yield objects
     clean_users(objects)
 
-def clean_users(objects: List[Any]):
+def clean_users(objects: list[Any]):
     api_manager = ApiManager(objects)
     for u in objects:
         if isinstance(u, CreateUserResponse):

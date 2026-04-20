@@ -67,10 +67,8 @@ class Endpoint(Enum):
         response_model=CreditRequestResponse
     )
 
-
     CREDIT_REPAY = EndpointConfiguration(
         request_model=CreditRepayRequest,
         url='/credit/repay',
         response_model=CreditRepayResponse
     )
-

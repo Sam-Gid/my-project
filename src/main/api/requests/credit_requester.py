@@ -1,11 +1,9 @@
 from http import HTTPStatus
-
 import requests
 from requests import Response
 from src.main.api.models.credit_request_model import CreditRequestModel
 from src.main.api.models.credit_request_response import CreditRequestResponse
 from src.main.api.requests.requester import Requester
-
 
 
 class CreditRequester(Requester):

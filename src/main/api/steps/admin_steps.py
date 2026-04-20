@@ -1,6 +1,7 @@
 from src.main.api.foundation.endpoint import Endpoint
 from src.main.api.foundation.requesters.crud_requester import CrudRequester
 from src.main.api.foundation.requesters.validate_crud_requester import ValidateCrudRequester
+from src.main.api.models.base_model import BaseModel
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.login_user_request import LoginUserRequest
 from src.main.api.specs.request_specs import RequestSpecs
@@ -9,7 +10,7 @@ from src.main.api.steps.base_steps import BaseSteps
 
 
 class AdminSteps(BaseSteps):
-    def create_user(self, create_user_request: CreateUserRequest):
+    def create_user(self, create_user_request: CreateUserRequest) -> BaseModel:
         response = ValidateCrudRequester(
             RequestSpecs.auth_headers(username='admin', password='123456'),
             Endpoint.ADMIN_CREATE_USER,
@@ -25,7 +26,7 @@ class AdminSteps(BaseSteps):
             ResponseSpecs.request_ok()
         ).delete(user_id)
 
-    def create_invalid_user(self, create_user_request: CreateUserRequest):
+    def create_invalid_user(self, create_user_request: CreateUserRequest) -> BaseModel:
         response = CrudRequester(
             RequestSpecs.auth_headers(username='admin', password='123456'),
             Endpoint.ADMIN_CREATE_USER,
@@ -33,7 +34,7 @@ class AdminSteps(BaseSteps):
         ).post(create_user_request)
         return response
 
-    def login_user(self, login_user_request: LoginUserRequest):
+    def login_user(self, login_user_request: LoginUserRequest) -> BaseModel:
         response = ValidateCrudRequester(
             RequestSpecs.unauth_headers(),
             Endpoint.LOGIN_USER,

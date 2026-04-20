@@ -1,18 +1,17 @@
 import requests
-from src.main.api.configs.config import Config
 from src.main.api.models.login_user_request import LoginUserRequest
 from src.main.api.models.login_user_response import LoginUserResponse
 
 
 class RequestSpecs:
     @staticmethod
-    def base_headers():
+    def base_headers() -> dict:
         return {'Content-Type': 'application/json',
                 'Accept': 'application/json'
         }
 
     @staticmethod
-    def auth_headers(username: str, password: str):
+    def auth_headers(username: str, password: str) -> dict:
         request = LoginUserRequest(username=username, password=password)
 
         response = requests.post(
@@ -33,6 +32,6 @@ class RequestSpecs:
         raise Exception('Failed to login')
 
     @staticmethod
-    def unauth_headers():
+    def unauth_headers() -> dict:
         return RequestSpecs.base_headers()
 
