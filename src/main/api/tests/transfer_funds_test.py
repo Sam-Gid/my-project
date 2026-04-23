@@ -74,5 +74,5 @@ class TestTransferFunds:
         )
         assert recipient_balance_after == recipient_balance_before, (
             f'Ошибка: Баланс получателя изменился после невалидного перевода. '
-            f'Ожидалось: {recipient_balance_before}, получено: {recipient_balance_after}'
+            f"Ожидалось: {recipient_balance_before}, получено: {recipient_balance_after}"
         )
